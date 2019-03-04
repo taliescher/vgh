@@ -1,0 +1,41 @@
+{
+  "name": "vgh-pages",
+  "version": "1.0.0",
+  "description": "Publishes your Vuejs project to a git pages branch on GitHub",
+  "main": "index.js",
+  "bin": {
+    "vgh": "bin/vgh.js",
+    "vgh-commit": "bin/commit",
+    "vgh-push": "bin/push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taliescher/vgh-pages.git"
+  },
+  "keywords": [
+    "vue",
+    "gh-pages",
+    "js",
+    "npm",
+    "node",
+    "github",
+    "pages",
+    "cli",
+    "vue-cli",
+    "vue gh pages",
+    "vue ghpages",
+    "vghpages",
+    "vgh-pages",
+    "github-pages",
+    "github pages"
+  ],
+  "author": "Tali Escher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taliescher/vgh-pages/issues"
+  },
+  "homepage": "https://github.com/taliescher/vgh-pages#readme",
+  "dependencies": {
+    "shelljs": "^0.8.3"
+  }
+}
