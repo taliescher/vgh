@@ -1,12 +1,10 @@
 {
   "name": "vgh-pages",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Publishes your Vuejs project to a git pages branch on GitHub",
   "main": "index.js",
   "bin": {
-    "vgh": "bin/vgh.js",
-    "vgh-commit": "bin/commit",
-    "vgh-push": "bin/push"
+    "vgh": "bin/vgh.js"
   },
   "repository": {
     "type": "git",
@@ -36,6 +34,8 @@
   },
   "homepage": "https://github.com/taliescher/vgh-pages#readme",
   "dependencies": {
+    "commander": "^2.19.0",
+    "gh-pages": "^2.0.1",
     "shelljs": "^0.8.3"
   }
 }
