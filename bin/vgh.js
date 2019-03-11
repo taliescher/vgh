@@ -10,6 +10,15 @@ options
   .description(PKG.description)
   .version(PKG.version, "-v, -V, --version")
   .option(
+    "-d, --dir <dir>",
+    "Directory of the content to be published. /dist is the default",
+    "dist"
+  )
+  .option(
+    "-p, --public-path <path>",
+    "by default we assume you want your app to be deployed at the root of your domain. If it's not the case, set this variable as the name of the path."
+  )
+  .option(
     "-a, --add-dotfiles",
     "by default git ignores files starting with a '.'; To add them set this flag to true"
   )
@@ -17,11 +26,6 @@ options
     "-b, --branch <branch>",
     "The git branch target for your GitHub Pages",
     "gh-pages"
-  )
-  .option(
-    "-d, --dir <dir>",
-    "Directory of the content to be published. /dist is the default",
-    "dist"
   )
   .option(
     "-e, --email <email>",

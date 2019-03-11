@@ -19,19 +19,37 @@ exports.run = function(params) {
     user: { name: params.name, email: params.email } || undefined
   };
 
-  try {
-    !params.skipBuild
-      ? (async () => {
-          await SHELL.exec("npm run build", () =>
-            console.log(`Ahoy => building proccess complete`)
-          );
-        })()
-      : console.log(`Ahoy => building proccess skipped by the user.`);
-  } catch (err) {
-    console.log(
-      `Oh noes => omething went wrong during the building proccess. Here's the output: ${err}`
-    );
-  } finally {
-    GHP.publish(targetDirectory, options, console.log(`Ahoy => deploy proccess complete`));
-  }
+  (() => {
+    new Promise((resolve, reject) => {
+      if (params.skipBuild) {
+        console.log(`Ahoy => you decided to skip the building proccess.`);
+        return resolve();
+      }
+      SHELL.exec("npm run build", (code, out, err) => {
+        if (code) {
+          return reject(err);
+        }
+        console.log(`Ahoy => building proccess complete`);
+        return resolve();
+      });
+    })
+      .catch(err => {
+        console.log(
+          `Oh noes => Something went wrong during the building proccess. Here's the output: ${err}`
+        );
+      })
+      .then(() => {
+        GHP.publish(targetDirectory, options);
+      })
+      .then(() => {
+        console.log(
+          `Ahoy => deploy proccess complete. Make sure you have GitHub Pages enabled in this project settings ok`
+        );
+      })
+      .catch(err => {
+        console.log(
+          `Oh noes => Something went wrong during the building proccess. Here's the output: ${err}`
+        );
+      });
+  })();
 };
