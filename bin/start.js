@@ -1,31 +1,41 @@
 #!/usr/bin/env node
 
-"use strict";
+'use strict';
 
-const GHP = require("gh-pages");
-const SHELL = require("shelljs");
+const GHP = require('gh-pages');
+const SHELL = require('shelljs');
 
 exports.run = function(params) {
   GHP.clean();
-  const targetDirectory = `${process.cwd()}/${params.dir}`;
-
   const options = {
-    branch: params.branch || "gh-pages",
-    dest: ".",
-    dotfiles: params.dotfiles || false,
-    add: params.keepExistingFiles || false,
-    tag: params.tag && params.tag,
+    branch: params.branch,
+    dest: '.',
+    dotfiles: params.addDotfiles,
+    add: params.keepExistingFiles,
+    tag: params.tag,
     message: params.message,
-    user: { name: params.name, email: params.email } || undefined
+    user:
+      params.name && params.email
+        ? { name: params.name, email: params.email }
+        : undefined
   };
+
+  const publicPath = params.publicPath ? `/${params.publicPath}/` : '/';
+  !SHELL.test('-e', `${process.cwd()}/vue.config.js`) &&
+    SHELL.exec(
+      `echo "module.exports = { publicPath: '${publicPath}' }" >> vue.config.js`
+    );
 
   (() => {
     new Promise((resolve, reject) => {
-      if (params.skipBuild) {
+      if (params.build) {
         console.log(`Ahoy => you decided to skip the building proccess.`);
         return resolve();
       }
-      SHELL.exec("npm run build", (code, out, err) => {
+      const packageManager = SHELL.test('-e', `${process.cwd()}/yarn.lock`)
+        ? 'yarn'
+        : 'npm';
+      SHELL.exec(`${packageManager} run build`, (code, out, err) => {
         if (code) {
           return reject(err);
         }
@@ -34,21 +44,22 @@ exports.run = function(params) {
       });
     })
       .catch(err => {
-        console.log(
-          `Oh noes => Something went wrong during the building proccess. Here's the output: ${err}`
+        console.warn(
+          `Oh noes => Something went wrong during the building proccess`
         );
       })
       .then(() => {
+        const targetDirectory = `${process.cwd()}/${params.dir}`;
         GHP.publish(targetDirectory, options);
       })
-      .then(() => {
-        console.log(
-          `Ahoy => deploy proccess complete. Make sure you have GitHub Pages enabled in this project settings ok`
+      .catch(err => {
+        console.warn(
+          `Oh noes => Something went wrong during the building proccess`
         );
       })
-      .catch(err => {
+      .finally(() => {
         console.log(
-          `Oh noes => Something went wrong during the building proccess. Here's the output: ${err}`
+          `Ahoy => deploy proccess complete. Make sure you have GitHub Pages enabled in this project settings ok`
         );
       });
   })();
