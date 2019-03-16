@@ -19,7 +19,7 @@ exports.run = function(params) {
         ? { name: params.name, email: params.email }
         : undefined
   };
-
+  
   const publicPath = params.publicPath ? `/${params.publicPath}/` : '/';
   !SHELL.test('-e', `${process.cwd()}/vue.config.js`) &&
     SHELL.exec(
@@ -28,39 +28,38 @@ exports.run = function(params) {
 
   (() => {
     new Promise((resolve, reject) => {
-      if (params.build) {
+      if (params.skipBuild) {
         console.log(`Ahoy => you decided to skip the building proccess.`);
         return resolve();
       }
-      const packageManager = SHELL.test('-e', `${process.cwd()}/yarn.lock`)
-        ? 'yarn'
-        : 'npm';
-      SHELL.exec(`${packageManager} run build`, (code, out, err) => {
+      const packageManager = SHELL.test('-e', `${process.cwd()}/yarn.lock`) ? 'yarn' : 'npm';
+
+      SHELL.exec(`${packageManager} run build`, (code, stdout, stderr) => {
         if (code) {
-          return reject(err);
+          return reject(stderr);
         }
         console.log(`Ahoy => building proccess complete`);
         return resolve();
       });
     })
-      .catch(err => {
-        console.warn(
-          `Oh noes => Something went wrong during the building proccess`
-        );
-      })
-      .then(() => {
-        const targetDirectory = `${process.cwd()}/${params.dir}`;
-        GHP.publish(targetDirectory, options);
-      })
-      .catch(err => {
-        console.warn(
-          `Oh noes => Something went wrong during the building proccess`
-        );
-      })
-      .finally(() => {
-        console.log(
-          `Ahoy => deploy proccess complete. Make sure you have GitHub Pages enabled in this project settings ok`
-        );
-      });
+    .catch((err) => {
+      console.warn(
+        `Oh noes => Something went wrong during the building proccess`
+      );
+    })
+    .then(() => {
+      const targetDirectory = `${process.cwd()}/${params.dir}`;
+      GHP.publish(targetDirectory, options);
+    })
+    .catch((err) => {
+      console.warn(
+        `Oh noes => Something went wrong during the building proccess`
+      );
+    })
+    .then(() => {
+      console.log(
+        `Ahoy => deploy proccess complete. Make sure you have GitHub Pages enabled in this project settings ok`
+      );
+    });
   })();
 };

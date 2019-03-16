@@ -1,16 +1,15 @@
-#### vgh-pages
-###### What
+# vgh
+
+#### What
 CLI to quickly deploy [VueJS](https://vuejs.org/) projects to GitHub Pages.
 This is pretty useful for quick mocks and prototypes.
 
-***
-###### Why
+#### Why
 <dd>
 why not?
 </dd>
 
-***
-###### How
+#### How
 
 <dt>
 Installation
@@ -21,13 +20,13 @@ If you don't have them already, please install the following dependencies:
 - [node](https://nodejs.org)
 - [GIT](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-Then you can install vgh-pages through a package manager of your preference:
+Then you can install vgh through a package manager of your preference:
 
 ```bash
 # using yarn
-yarn add global vgh-pages
+yarn add global vgh
 # using npm
-npm i -g vgh-pages
+npm i -g vgh
 ```
 </dd>
 <dt>
@@ -61,5 +60,9 @@ flag                         |                 Usage                 |          
 </dd>
 
 ***
+<dt>
+Don't forget to handle the relative paths ♡
 
-@ instead of ..
+</dt>
+
+`@` instead of `..`
